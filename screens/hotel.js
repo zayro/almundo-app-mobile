@@ -25,9 +25,9 @@ import {
 
 import * as axios from "axios";
 
-import Constants from "expo-constants";
-
 import {config} from "../config/enviroment"
+
+import { styles } from '../style/index';
 
 export class HotelScreen extends React.Component {
   constructor(props) {
@@ -68,7 +68,12 @@ export class HotelScreen extends React.Component {
   }
 
   static navigationOptions = {
-    title: "Lista de Hoteles"
+    title: "Lista de Hoteles",
+    /*
+      headerTitleStyle: {color:'black'},
+      headerStyle: {backgroundColor:'white'},
+      headerTintColor: 'orange'
+     */     
     /* No more header config here! */
   };
 
@@ -135,7 +140,7 @@ export class HotelScreen extends React.Component {
               <Input
                 placeholder="BUSCAR HOTELES"
                 rightIcon={
-                  <Icon name="search" type="material" size={24} color="black" />
+                  <Icon name="search" type="material" size={24} color="orange" />
                 }
                 
                 onChangeText = {(text) => this.findSearch(text)}
@@ -206,50 +211,3 @@ export class HotelScreen extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container_main: {
-    flex: 1,
-    marginTop: Constants.statusBarHeight
-  },
-  scrollView: {
-    marginHorizontal: 5
-  },
-  user: { flex: 1, alignItems: "center", justifyContent: "center" },
-  image: { width: Dimensions.get('window').width - 50, height: 150 },
-  name_hotel: { fontWeight: "bold", fontSize: 20 },
-  name_description: { color: "gray", fontSize: 12 },
-  raiting: { textAlign: "left" },
-  price: {
-    color: "#F1C30E",
-    fontWeight: "bold",
-    fontSize: 18
-  },
-  container_img: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: -10
-  },
-  container: {
-    flexDirection: "column"
-  },
-  leftContainer: {
-    flex: 1,
-    flexDirection: "row",
-    alignContent: "space-between",
-    justifyContent: "flex-start",
-    paddingTop: 5
-    
-  },
-  rightContainer: {
-    flex: 1,
-    flexDirection: "row",
-    alignContent: "space-between",
-    justifyContent: "flex-end",
-    marginTop: -20
-  },
-  buscador: {
-    borderRadius: 5
-  }
-});

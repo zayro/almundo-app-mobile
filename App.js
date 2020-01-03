@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 // navigation
 import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator, HeaderBackButton } from 'react-navigation-stack';
 
 
 import { Button, ThemeProvider, Header, Card, ListItem , Icon} from 'react-native-elements';
@@ -23,12 +23,15 @@ const AppNavigator = createStackNavigator(
     initialRouteName: 'Home',
     /* The header config from HomeScreen is now here */
     defaultNavigationOptions: {
+  
+
       headerStyle: {
         backgroundColor: 'white',
       },
-      headerTintColor: 'black',
+      headerTintColor: 'orange',
       headerTitleStyle: {
         fontWeight: 'bold',
+        color:'black'
       },
     },
     headerMode: 'screen',
@@ -41,6 +44,11 @@ const AppNavigator = createStackNavigator(
 const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     return <AppContainer />;
   }
