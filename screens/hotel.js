@@ -150,7 +150,7 @@ export class HotelScreen extends React.Component {
                   onPress={ () => {
                     /* 1. Navigate to the Details route with params */
                     //console.log('------------ send detail --------',u._id)
-                    this.props.navigation.navigate("Detalle", {
+                    this.props.navigation.navigate("DetalleScreen", {
                       itemId: u._id,
                       hotel: u.name
                     });

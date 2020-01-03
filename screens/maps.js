@@ -27,7 +27,7 @@ import * as axios from "axios";
 
 import Constants from "expo-constants";
 
-export class DetalleScreen extends React.Component {
+export class MapasScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -103,7 +103,7 @@ export class DetalleScreen extends React.Component {
                     </View>
                     <View style={styles.rightContainer}>
                       <Text style={styles.name_description}>
-                        {u.description}
+                        ------ {u.description}
                       </Text>
                     </View>
                   </View>
@@ -127,7 +127,14 @@ export class DetalleScreen extends React.Component {
                     source={{ uri: u.map }}
                   />
 
-                  <Marker coordinate={this.state.coordinate} />
+                  <MapView
+                    initialRegion={{
+                      latitude: 37.78825,
+                      longitude: -122.4324,
+                      latitudeDelta: 0.0922,
+                      longitudeDelta: 0.0421
+                    }}
+                  />
                 </View>
               </Card>
             );

@@ -11,12 +11,14 @@ import { Button, ThemeProvider, Header, Card, ListItem , Icon} from 'react-nativ
 import {HomeScreen} from './screens/home';
 import {HotelScreen} from './screens/hotel';
 import {DetalleScreen} from './screens/detalle';
+import {MapasScreen} from './screens/maps';
 
 const AppNavigator = createStackNavigator(
   {
     Home: HomeScreen,
     Hotel: HotelScreen,
     Detalle: DetalleScreen,
+    Mapa: MapasScreen,
   },
   {
     initialRouteName: 'Hotel',
