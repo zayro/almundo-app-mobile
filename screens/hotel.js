@@ -1,50 +1,238 @@
-import React from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
-import { Button, ThemeProvider, Header, Card, ListItem , Icon} from 'react-native-elements';
+import React from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  ActivityIndicator,
+  SafeAreaView,
+  ScrollView,
+  TouchableHighlight,
+  Dimensions
+} from "react-native";
+import {
+  Button,
+  ThemeProvider,
+  Header,
+  Card,
+  ListItem,
+  Icon,
+  Divider,
+  Rating,
+  AirbnbRating,
+  Input
+} from "react-native-elements";
 
-const users = [
-  {
-     name: 'brynn',
-     avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg'
-  },
-  
- ];
+import * as axios from "axios";
 
-export class HomeScreen extends React.Component {
+import Constants from "expo-constants";
+
+export class HotelScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+      dataSource: [],
+      filter: "",
+      data: [
+        {
+          name: "Hotel Havana",
+          description: "Precio Por Noche",
+          images: ["https://source.unsplash.com/random/800x400/?hotel"],
+          stars: 3,
+          price: 34.51
+        },
+        {
+          name: "Hotel Ramblas",
+          description: "Precio Por Noche",
+          images: ["https://source.unsplash.com/random/800x400/?resort"],
+          stars: 2,
+          price: 53000
+        },
+        {
+          name: "Hotel Decaron",
+          description: "Precio Por Noche",
+          images: ["https://source.unsplash.com/random/800x400/?home"],
+          stars: 4,
+          price: 46200
+        }
+      ]
+    };
+
+    console.log('width',Dimensions.get('window').width);
+    console.log('height', Dimensions.get('window').height);
+  }
+
   static navigationOptions = {
-    title: 'Hoteles',
+    title: "Lista de Hoteles"
     /* No more header config here! */
   };
 
-    render() {
-      return (
+  componentDidMount() {
+    axios
+      .get("http://192.168.1.2:3000/api/hotel")
+      .then(info => {
+        //console.log("******** hotel *********", info.data.hotel);
 
+        this.setState({
+          isLoading: false,
+          dataSource: info.data.hotel
+        });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
 
-<Card title="CARD WITH DIVIDER">
-  {
-    users.map((u, i) => {
+  handleChange = event => {
+    this.setState({ filter: event.target.value });
+  };
+
+  findSearch = (text) => {
+
+    const filteredData = this.state.dataSource.filter(function(info) {
+      const itemData = info.name.toLowerCase();
+      const textData = text.toLowerCase();
+      return itemData.indexOf(textData) > 1 ;
+    });    
+  }
+
+  render() {
+    const { filter, data } = this.state;
+
+    const lowercasedFilter = this.state.filter.toString().toLowerCase();
+
+    const filteredData = this.state.dataSource.filter(function(info) {
+      const result = info.name.toLocaleLowerCase().includes(lowercasedFilter);     
+      return result;
+    });
+
+    if (this.state.isLoading) {
       return (
-        <View key={i} style={styles.user}>
-          <Image
-            style={styles.image}
-            resizeMode="cover"
-            source={{ uri: u.avatar }}
-            
-          />
-          <Text style={styles.name}>{u.name}</Text>
+        <View style={{ flex: 1, padding: 20 }}>
+          <ActivityIndicator />
         </View>
       );
-    })
-  }
-</Card>
-
-
-      )
     }
+
+    return (
+      <SafeAreaView style={styles.container_main}>
+        <ScrollView style={styles.scrollView}>
+          <View style={styles.buscador}>
+            <Card>
+              <Input
+                placeholder="BUSCAR HOTELES"
+                rightIcon={
+                  <Icon name="search" type="material" size={24} color="black" />
+                }
+                value={filter}
+                onChange={this.handleChange}
+                
+              />
+            </Card>
+          </View>
+
+          {filteredData.map((u, i) => {
+            return (
+              <Card key={i}>
+                <TouchableHighlight key={i}
+                  onPress={ () => {
+                    /* 1. Navigate to the Details route with params */
+                    //console.log('------------ send detail --------',u._id)
+                    this.props.navigation.navigate("Detalle", {
+                      itemId: u._id,
+                      hotel: u.name
+                    });
+                  }}
+                >
+                  <View key={i+'view_image'}>
+                    <View style={styles.container_img}>
+                      {u.images.map(x => {
+                        return (
+                          <Image key={i+'image'}
+                            style={[styles.image]}
+                            resizeMode="cover"
+                            source={{ uri: x }}
+                          />
+                        );
+                      })}
+                    </View>
+
+                    <View style={styles.container} key={i+'text'}>
+                      <View style={styles.leftContainer}>
+                        <Text style={styles.name_hotel}>{u.name}</Text>
+                      </View>
+                      <View style={styles.rightContainer}>
+                        <Text style={styles.name_description}>
+                          {u.description}
+                        </Text>
+                      </View>
+                    </View>
+
+                    <View style={{ flexDirection: "column" }} key={i+'rank'}>
+                      <View style={styles.leftContainer}>
+                        <Rating
+                          type="star"
+                          ratingCount={4}
+                          imageSize={20}
+                          startingValue={u.stars}
+                        ></Rating>
+                      </View>
+
+                      <View style={styles.rightContainer} key={i+'precio'}>
+                        <Text style={styles.price}> ARS {u.price} </Text>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableHighlight>
+              </Card>
+            );
+          })}
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-  user: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  image: {  alignItems: 'center', justifyContent: 'center' },
-  name: {  alignItems: 'center', justifyContent: 'center' },
+  container_main: {
+    flex: 1,
+    marginTop: Constants.statusBarHeight
+  },
+  scrollView: {
+    marginHorizontal: 5
+  },
+  user: { flex: 1, alignItems: "center", justifyContent: "center" },
+  image: { width: Dimensions.get('window').width - 50, height: 150 },
+  name_hotel: { fontWeight: "bold", fontSize: 20 },
+  name_description: { color: "gray", fontSize: 12 },
+  raiting: { textAlign: "left" },
+  price: {
+    color: "#F1C30E",
+    fontWeight: "bold",
+    fontSize: 18
+  },
+  container_img: {
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  container: {
+    flexDirection: "column"
+  },
+  leftContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignContent: "space-between",
+    justifyContent: "flex-start"
+  },
+  rightContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignContent: "space-between",
+    justifyContent: "flex-end"
+  },
+  buscador: {
+    borderRadius: 5
+  }
 });

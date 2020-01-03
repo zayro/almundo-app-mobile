@@ -9,13 +9,17 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { Button, ThemeProvider, Header, Card, ListItem , Icon} from 'react-native-elements';
 // home
 import {HomeScreen} from './screens/home';
+import {HotelScreen} from './screens/hotel';
+import {DetalleScreen} from './screens/detalle';
 
 const AppNavigator = createStackNavigator(
   {
-    Home: HomeScreen
+    Home: HomeScreen,
+    Hotel: HotelScreen,
+    Detalle: DetalleScreen,
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Hotel',
     /* The header config from HomeScreen is now here */
     defaultNavigationOptions: {
       headerStyle: {
@@ -40,4 +44,3 @@ export default class App extends React.Component {
     return <AppContainer />;
   }
 }
-
