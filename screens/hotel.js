@@ -33,7 +33,9 @@ export class HotelScreen extends React.Component {
     this.state = {
       isLoading: true,
       dataSource: [],
+      dataSourceDefault: [],
       filter: "",
+      text: "",
       data: [
         {
           name: "Hotel Havana",
@@ -76,7 +78,8 @@ export class HotelScreen extends React.Component {
 
         this.setState({
           isLoading: false,
-          dataSource: info.data.hotel
+          dataSource: info.data.hotel,
+          dataSourceDefault: info.data.hotel
         });
       })
       .catch(function(error) {
@@ -89,23 +92,30 @@ export class HotelScreen extends React.Component {
   };
 
   findSearch = (text) => {
+    console.log(text);
 
-    const filteredData = this.state.dataSource.filter(function(info) {
+    const filteredData = this.state.dataSourceDefault.filter(function(info) {
       const itemData = info.name.toLowerCase();
       const textData = text.toLowerCase();
-      return itemData.indexOf(textData) > 1 ;
+      //return itemData.indexOf(textData) > 1 ;
+      return itemData.includes(textData); 
     });    
+    this.setState({ 
+      text: text,
+      dataSource: filteredData
+     });
   }
 
   render() {
-    const { filter, data } = this.state;
+
+/*     const { filter, data } = this.state;
 
     const lowercasedFilter = this.state.filter.toString().toLowerCase();
 
     const filteredData = this.state.dataSource.filter(function(info) {
       const result = info.name.toLocaleLowerCase().includes(lowercasedFilter);     
       return result;
-    });
+    }); */
 
     if (this.state.isLoading) {
       return (
@@ -125,14 +135,15 @@ export class HotelScreen extends React.Component {
                 rightIcon={
                   <Icon name="search" type="material" size={24} color="black" />
                 }
-                value={filter}
-                onChange={this.handleChange}
+                
+                onChangeText = {(text) => this.findSearch(text)}
+                value = {this.state.text}
                 
               />
             </Card>
           </View>
 
-          {filteredData.map((u, i) => {
+          {this.state.dataSource.map((u, i) => {
             return (
               <Card key={i}>
                 <TouchableHighlight key={i}
