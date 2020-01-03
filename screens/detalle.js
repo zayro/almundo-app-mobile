@@ -8,16 +8,13 @@ import {
   SafeAreaView,
   ScrollView
 } from "react-native";
-import {
-  Card,
-  Icon,
-  Rating,
-} from "react-native-elements";
-
+import { Card, Icon, Rating } from "react-native-elements";
 
 import * as axios from "axios";
 
 import Constants from "expo-constants";
+
+import { config } from "../config/enviroment";
 
 export class DetalleScreen extends React.Component {
   constructor(props) {
@@ -28,8 +25,7 @@ export class DetalleScreen extends React.Component {
     };
 
     const { params } = this.props.navigation.state;
-    const itemId = params ?params.itemId : null;
-
+    const itemId = params ? params.itemId : null;
 
     console.log("*****************", params.itemId);
     this.loadInfo(itemId);
@@ -41,7 +37,7 @@ export class DetalleScreen extends React.Component {
 
   loadInfo(id) {
     axios
-      .get(`http://192.168.1.2:3000/api/hotel/${id}`)
+      .get(`${config.url}/api/hotel/${id}`)
       .then(info => {
         console.log("******** hotel *********", info.data.hotel);
 
@@ -53,25 +49,23 @@ export class DetalleScreen extends React.Component {
       .catch(function(error) {
         console.log(error);
       });
-
-     
   }
 
-   loadInfos(id) {
-    fetch(`http://localhost:3000/api/hotel/${id}`)
-    .then((response) => response.json())
-    .then((info) => {
-      console.log(info);
-      this.setState({
-        isLoading: false,
-        dataSource: info.hotel
+  loadInfos(id) {
+    fetch(`${config.url}/api/hotel/${id}`)
+      .then(response => response.json())
+      .then(info => {
+        console.log(info);
+        this.setState({
+          isLoading: false,
+          dataSource: info.hotel
+        });
+      })
+      .catch(error => {
+        console.error(error);
       });
-    })
-    .catch((error) => {
-      console.error(error);
-    });
   }
-  
+
   render() {
     if (this.state.isLoading) {
       return (
@@ -87,36 +81,41 @@ export class DetalleScreen extends React.Component {
           {this.state.dataSource.map((u, i) => {
             return (
               <Card key={i}>
-
-                <View style={styles.container}  key={i+'views'}>
-          
-                    <View style={styles.leftContainer}>
-                      <Text style={styles.name_hotel}>{u.name}</Text>
-                    </View>    
-        
-
-                  <View style={{ flexDirection: "column" }} key={i+'raiting'}>
-                    <View style={styles.leftContainer}>
-                      <Rating
-                        type="star"
-                        ratingCount={4}
-                        imageSize={20}
-                        startingValue={u.stars}
-                      ></Rating>
-                    </View>
-
-
-                    <View style={styles.leftContainer}>
-                    <Icon name="marker" type="foundation" color="gray" size={20} onPress={() => this.props.navigation.navigate('Hotel')} />
-                    <View>
-                      <Text style={styles.name_description}>                      
-                        {u.street}
-                      </Text>
-                    </View>
-                    </View>                    
-
-
+                <View style={styles.container} key={i + "views"}>
+                  <View style={styles.leftContainer}>
+                    <Text style={styles.name_hotel}>{u.name}</Text>
                   </View>
+                </View>
+
+                <View style={{ flexDirection: "column" }} key={i + "raiting"}>
+                  <View style={styles.leftContainer}>
+                    <Rating
+                      type="star"
+                      ratingCount={4}
+                      imageSize={20}
+                      startingValue={u.stars}
+                    ></Rating>
+                  </View>
+                </View>
+
+                <View key={i + "street"} style={[styles.leftContainer, styles.icono_space]}>
+               
+                  <Icon
+                    name="marker"
+                    type="foundation"
+                    color="gray"
+                    style={styles.icono}
+                    size={20}
+                   
+                  />
+         
+
+                
+
+                <View style={styles.street}>
+            <Text style={styles.name_description}>  {u.street} </Text>
+                </View>
+
                 </View>
 
                 <View style={styles.container_img}>
@@ -145,10 +144,11 @@ const styles = StyleSheet.create({
   scrollView: {
     marginHorizontal: 10
   },
-  image: { width: 350, height: 150 },
+  image: { width: 350, height: 250 },
   name_hotel: { fontWeight: "bold", fontSize: 20 },
   name_description: { color: "gray", fontSize: 12 },
   raiting: { textAlign: "left" },
+  street: { marginTop: 0,  marginRight: 50 },
   price: {
     color: "#F1C30E",
     fontWeight: "bold",
@@ -166,7 +166,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignContent: "space-between",
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
+    padding: 3
   },
   rightContainer: {
     flex: 1,
@@ -174,7 +175,12 @@ const styles = StyleSheet.create({
     alignContent: "space-between",
     justifyContent: "flex-end"
   },
-  buscador: {
-    borderRadius: 5
-  }
+  icono: {
+    margin: 5,
+    padding:5
+  },
+  icono_space: {
+    margin: 5,
+    padding:5
+  }  
 });

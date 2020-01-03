@@ -24,7 +24,7 @@
       "package": "com.company",
       "config": {        
         "googleMaps": {
-           "apiKey": "AIzaSyDqWj59GeSnelZaAvKpiS5OWlXPYuCcTj0" 
+           "apiKey": "" 
           }
       }
     }

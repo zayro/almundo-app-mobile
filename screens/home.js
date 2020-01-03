@@ -10,13 +10,6 @@ import {
   Icon
 } from "react-native-elements";
 
-const users = [
-  {
-    name: "brynn",
-    avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg"
-  }
-];
-
 export class HomeScreen extends React.Component {
   static navigationOptions = {
     title: "Hoteles"
@@ -27,10 +20,9 @@ export class HomeScreen extends React.Component {
     return (
       <View>
       <Card title="BUSCADOR DE HOTELES">
-        {users.map((u, i) => {
-          return (
+   
 
-            <View key={i} style={styles.user}>
+            <View style={styles.user}>
 
               <Icon
                 name="hotel"
@@ -42,11 +34,8 @@ export class HomeScreen extends React.Component {
 
               </View>
 
-              
 
-
-          );
-        })}
+   
       </Card>
 
       <Divider style={{ backgroundColor: 'blue' }} />

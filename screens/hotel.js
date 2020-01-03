@@ -27,6 +27,8 @@ import * as axios from "axios";
 
 import Constants from "expo-constants";
 
+import {config} from "../config/enviroment"
+
 export class HotelScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -72,7 +74,7 @@ export class HotelScreen extends React.Component {
 
   componentDidMount() {
     axios
-      .get("http://192.168.1.2:3000/api/hotel")
+      .get(`${config.url}/api/hotel`)
       .then(info => {
         //console.log("******** hotel *********", info.data.hotel);
 
@@ -150,7 +152,7 @@ export class HotelScreen extends React.Component {
                   onPress={ () => {
                     /* 1. Navigate to the Details route with params */
                     //console.log('------------ send detail --------',u._id)
-                    this.props.navigation.navigate("DetalleScreen", {
+                    this.props.navigation.navigate("Detalle", {
                       itemId: u._id,
                       hotel: u.name
                     });
@@ -226,7 +228,8 @@ const styles = StyleSheet.create({
   container_img: {
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    marginTop: -10
   },
   container: {
     flexDirection: "column"
@@ -235,13 +238,16 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignContent: "space-between",
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
+    paddingTop: 5
+    
   },
   rightContainer: {
     flex: 1,
     flexDirection: "row",
     alignContent: "space-between",
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
+    marginTop: -20
   },
   buscador: {
     borderRadius: 5
